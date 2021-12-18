@@ -3,7 +3,7 @@ const { Router } = express;
 const routerProductos = Router();
 const cors = require('cors');
 const app = express();
-const PORT = 8083;
+const PORT = 8080;
 
 app.use('/api/productos', routerProductos);
 app.use(express.static('public'));
