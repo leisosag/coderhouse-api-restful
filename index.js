@@ -32,6 +32,8 @@ routerProductos.get('/:id', (req, res) => {
 // POST
 routerProductos.post('/', (req, res) => {
 	let producto = req.body;
+	producto.price = parseInt(producto.price);
+	producto.id = parseInt(producto.id);
 	let response = null;
 	let ids = [];
 
@@ -49,20 +51,27 @@ routerProductos.post('/', (req, res) => {
 	res.json(response);
 });
 
-// no esta funcionando el editar desde el html
 routerProductos.post('/:id', (req, res) => {
-	let { id } = req.params;
 	let productoEditado = req.body;
 	let response = null;
+	productoEditado.price = parseInt(productoEditado.price);
+	productoEditado.id = parseInt(productoEditado.id);
 
-	const productoOriginal = productos.filter((p) => p.id === parseInt(id));
+	const productoOriginal = productos.filter(
+		(p) => p.id === parseInt(productoEditado.id)
+	);
 
 	if (!productoOriginal.length) {
 		response = { error: 'producto no encontrado' };
 	} else {
 		const index = productos.indexOf(productoOriginal[0]);
-		productos.splice(index, 1, productoEditado);
-		response = productos[index];
+		if (productoEditado.hasOwnProperty('title')) {
+			productos.splice(index, 1, productoEditado);
+			response = productos[index];
+		} else {
+			productos.splice(index, 1);
+			response = productos;
+		}
 	}
 	res.json(response);
 });
